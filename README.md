@@ -2,11 +2,13 @@
  - VPC
     - public subnet, 
         - EC2 bastion host running ssm
-    - 2 private subnets
+    - 2 private subnets in different AZs
         - aurora serverless
     
 # activate foundational models
 
+For this tests I activated:  
+- Claude V2
 
 # open connection for rds
 aws ssm start-session \

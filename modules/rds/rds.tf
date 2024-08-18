@@ -39,7 +39,7 @@ resource "aws_rds_cluster_instance" "postgres" {
 
 resource "aws_db_subnet_group" "aurora" {
   name       = "aurora-subnet-group"
-  subnet_ids = [aws_subnet.private1.id, aws_subnet.private2.id]
+  subnet_ids = var.private_subnet_ids
 
   tags = {
     Name = "aurora-subnet-group"
@@ -48,7 +48,7 @@ resource "aws_db_subnet_group" "aurora" {
 
 resource "aws_security_group" "rds_sg" {
   name_prefix = "rds-sg-"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 5432
@@ -98,7 +98,7 @@ resource "aws_iam_role_policy_attachment" "ssm_role_policy" {
 resource "aws_instance" "bastion" {
   ami                  = "ami-04a81a99f5ec58529" # Change to your desired AMI
   instance_type        = "t2.micro"
-  subnet_id            = aws_subnet.public.id
+  subnet_id            = var.public_subnet_id
   iam_instance_profile = aws_iam_instance_profile.ssm_instance_profile.name
 
   tags = {

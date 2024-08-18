@@ -2,6 +2,8 @@ data "aws_iam_policy" "bedrock_default" {
   name = "AmazonBedrockFullAccess"
 }
 
+data "aws_caller_identity" "current" {}
+
 
 data "aws_iam_policy_document" "bedrock_trust" {
   statement {
@@ -38,7 +40,7 @@ data "aws_iam_policy_document" "default_role_policy" {
       "rds-data:BatchExecuteStatement"
     ]
 
-    resources = [aws_rds_cluster.postgres.arn]
+    resources = [var.rds_cluster_arn]
   }
 
   statement {
@@ -50,7 +52,7 @@ data "aws_iam_policy_document" "default_role_policy" {
   statement {
     effect    = "Allow"
     actions   = ["secretsmanager:GetSecretValue"]
-    resources = [aws_rds_cluster.postgres.master_user_secret[0].secret_arn]
+    resources = [var.rds_password_secret_arn]
   }
 
   statement {
@@ -88,7 +90,7 @@ resource "awscc_bedrock_knowledge_base" "bedrock" {
   storage_configuration = {
     type = "RDS"
     rds_configuration = {
-      credentials_secret_arn = aws_rds_cluster.postgres.master_user_secret[0].secret_arn
+      credentials_secret_arn = var.rds_password_secret_arn
       database_name          = "postgres"
       field_mapping = {
         metadata_field    = "metadata"
@@ -97,7 +99,7 @@ resource "awscc_bedrock_knowledge_base" "bedrock" {
         vector_field      = "embedding"
       }
       table_name   = "bedrock_integration.bedrock_kb"
-      resource_arn = aws_rds_cluster.postgres.arn
+      resource_arn = var.rds_cluster_arn
     }
   }
   knowledge_base_configuration = {
