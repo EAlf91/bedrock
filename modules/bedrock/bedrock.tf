@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "default_role_policy" {
     actions   = ["secretsmanager:GetSecretValue"]
     resources = [var.rds_password_secret_arn]
   }
-
+/* s3 data source 
   statement {
     effect  = "Allow"
     actions = ["s3:*"]
@@ -63,6 +63,7 @@ data "aws_iam_policy_document" "default_role_policy" {
       "${aws_s3_bucket.data_source.arn}/*"
     ]
   }
+  */
 }
 
 resource "aws_iam_policy" "bedrock_default" {
@@ -98,7 +99,7 @@ resource "awscc_bedrock_knowledge_base" "bedrock" {
         text_field        = "chunks"
         vector_field      = "embedding"
       }
-      table_name   = "bedrock_integration.bedrock_kb"
+      table_name   = var.table_name
       resource_arn = var.rds_cluster_arn
     }
   }
@@ -106,11 +107,16 @@ resource "awscc_bedrock_knowledge_base" "bedrock" {
     type = "VECTOR"
     vector_knowledge_base_configuration = {
       embedding_model_arn = "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v2:0"
+      embedding_model_configuration = {
+        dimensions = var.dimensions
+      }
     }
   }
   depends_on = [aws_iam_role.bedrock]
 }
 
+/*
+Only needed for standard bedrock saas
 resource "aws_s3_bucket" "data_source" {
   bucket = "bedrock-data-source-${data.aws_caller_identity.current.account_id}"
 }
@@ -125,3 +131,4 @@ resource "aws_bedrockagent_data_source" "example" {
     }
   }
 }
+*/

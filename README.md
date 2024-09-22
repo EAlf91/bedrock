@@ -18,10 +18,6 @@ aws ssm start-session \
     --parameters host="bedrock.cluster-c1ee2e0wq4md.us-east-1.rds.amazonaws.com",portNumber="5432",localPortNumber="5000"
 
 # EC2 GPU
-https://tecadmin.net/install-python-3-8-amazon-linux/
-https://www.python.org/downloads/release/python-3125/
-
-pip install onnxruntime-gpu -i https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/onnxruntime-cuda-12/pypi/simple/ -qq
 
 # prepare python
 sudo apt-get update
@@ -38,3 +34,13 @@ pip install fastembed
 pip install onnxruntime-gpu==1.17.*
 
 sudo apt-get install libcudnn8
+
+# upload files
+scp -i gpu.pem ./hp_all.json ubuntu@ec2-34-204-193-210.compute-1.amazonaws.com:./hp_all.json
+scp -i gpu.pem ./*.py ubuntu@ec2-34-204-193-210.compute-1.amazonaws.com:./
+
+
+source venvs/bedrock/bin/activate
+python main.py 1 10
+# download files
+scp -i gpu.pem -r ubuntu@ec2-34-204-193-210.compute-1.amazonaws.com:./output1.csv ./
