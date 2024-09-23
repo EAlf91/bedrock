@@ -20,9 +20,11 @@ For this tests I activated:
 - Claude V2
 
 # open connection for rds
+Get the instance id of your bastion host and replace the id from below
+
 aws ssm start-session \
     --region us-east-1 \
-    --target i-09f44e6bfed057306 \
+    --target i-09f44e6bfed057306 \ 
     --document-name AWS-StartPortForwardingSessionToRemoteHost \
     --parameters host="bedrock.cluster-c1ee2e0wq4md.us-east-1.rds.amazonaws.com",portNumber="5432",localPortNumber="5000"
 
