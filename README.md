@@ -30,7 +30,7 @@ aws ssm start-session \
 
 # EC2 GPU
 
-# prepare python
+# prepare fastembed for cuda 12
 sudo apt-get update
 sudo apt install python3.11
 sudo apt-get install python3.11-venv
