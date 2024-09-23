@@ -47,8 +47,10 @@ pip install onnxruntime-gpu==1.17.*
 sudo apt-get install libcudnn8
 
 # upload files
-scp -i gpu.pem ./hp_all.json ubuntu@ec2-34-204-193-210.compute-1.amazonaws.com:./hp_all.json
-scp -i gpu.pem ./*.py ubuntu@ec2-34-204-193-210.compute-1.amazonaws.com:./
+Replace the IP address with your own  
+
+scp -i gpu.pem ./hp_all.json ubuntu@ec2-34-204-193-210.compute-1.amazonaws.com:./hp_all.json  
+scp -i gpu.pem ./*.py ubuntu@ec2-34-204-193-210.compute-1.amazonaws.com:./  
 
 
 source venvs/bedrock/bin/activate
