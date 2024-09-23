@@ -1,10 +1,19 @@
 # setup infra
+You need to have access to an AWS account with proper permissions to run this.
+The way I set it up was creating a new AWS account (you need a credit card for this)
+
+The Infra consists of the following:
+
  - VPC
     - public subnet, 
         - EC2 bastion host running ssm
     - 2 private subnets in different AZs
         - aurora serverless
     
+Once you set it up you can run the terraform deployment:
+
+> sh ./ci/deploy-tf.sh infra
+
 # activate foundational models
 
 For this tests I activated:  
